@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("/", app, document);
-
+  console.log("shen");
   await app.listen(3333);
 }
 bootstrap();
