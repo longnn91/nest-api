@@ -22,10 +22,10 @@ let AuthController = class AuthController {
     }
     signUp(body) {
         console.log(body);
-        return this.authService.signUp();
+        return this.authService.signUp(body);
     }
-    signIn() {
-        return this.authService.signIn();
+    signIn(body) {
+        return this.authService.signIn(body);
     }
 };
 __decorate([
@@ -37,8 +37,9 @@ __decorate([
 ], AuthController.prototype, "signUp", null);
 __decorate([
     (0, common_1.Post)("sign-in"),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [dto_1.AuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signIn", null);
 AuthController = __decorate([
