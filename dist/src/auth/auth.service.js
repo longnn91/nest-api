@@ -11,27 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const runtime_1 = require("@prisma/client/runtime");
-const argon = require("argon2");
 const prisma_service_1 = require("../prisma/prisma.service");
+const argon = require("argon2");
+const runtime_1 = require("@prisma/client/runtime");
+const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 let AuthService = class AuthService {
-    constructor(prisma) {
+    constructor(prisma, jwt, config) {
         this.prisma = prisma;
+        this.jwt = jwt;
+        this.config = config;
     }
     async signUp(dto) {
-        const { email, firstName, lastName } = dto;
         const hash = await argon.hash(dto.password);
         try {
             const user = await this.prisma.user.create({
                 data: {
-                    email,
-                    firstName,
-                    lastName,
+                    email: dto.email,
                     hash,
                 },
             });
-            delete user.hash;
-            return user;
+            return this.signToken(user.id, user.email);
         }
         catch (error) {
             if (error instanceof runtime_1.PrismaClientKnownRequestError) {
@@ -43,24 +43,39 @@ let AuthService = class AuthService {
         }
     }
     async signIn(dto) {
-        try {
-            const user = await this.prisma.user.findUnique({
-                where: {
-                    email: dto.email,
-                },
-            });
-            if (!user)
-                throw new common_1.ForbiddenException("Credentials incorrect");
-            return user;
-        }
-        catch (error) {
-            throw error;
-        }
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: dto.email,
+            },
+        });
+        if (!user)
+            throw new common_1.ForbiddenException("Credentials incorrect");
+        const pwMatches = await argon.verify(user.hash, dto.password);
+        console.log({ pwMatches });
+        if (!pwMatches)
+            throw new common_1.ForbiddenException("Credentials incorrect");
+        return this.signToken(user.id, user.email);
+    }
+    async signToken(userId, email) {
+        const payload = {
+            sub: userId,
+            email,
+        };
+        const secret = this.config.get("JWT_SECRET");
+        const token = await this.jwt.signAsync(payload, {
+            expiresIn: "15m",
+            secret: secret,
+        });
+        return {
+            access_token: token,
+        };
     }
 };
 AuthService = __decorate([
-    (0, common_1.Injectable)({}),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map
