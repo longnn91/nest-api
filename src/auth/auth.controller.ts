@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto";
 
@@ -16,4 +17,8 @@ export class AuthController {
   signIn(@Body() body: AuthDto) {
     return this.authService.signIn(body);
   }
+
+  @Get("google")
+  @UseGuards(AuthGuard("google"))
+  async googleAuth(@Req() req) {}
 }

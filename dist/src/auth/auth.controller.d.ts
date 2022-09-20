@@ -9,4 +9,5 @@ export declare class AuthController {
     signIn(body: AuthDto): Promise<{
         access_token: string;
     }>;
+    googleAuth(req: any): Promise<void>;
 }

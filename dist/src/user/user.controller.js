@@ -18,7 +18,6 @@ const jwt_guard_1 = require("../auth/guard/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorator/get-user.decorator");
 let UserController = class UserController {
     getMe(user, email) {
-        console.log("em", email);
         return user;
     }
 };
