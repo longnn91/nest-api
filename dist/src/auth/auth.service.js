@@ -70,6 +70,15 @@ let AuthService = class AuthService {
             access_token: token,
         };
     }
+    googleLogin(req) {
+        if (!req.user) {
+            return "No user from google";
+        }
+        return {
+            message: "User information from google",
+            user: req.user,
+        };
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),

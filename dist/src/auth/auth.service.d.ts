@@ -16,4 +16,8 @@ export declare class AuthService {
     signToken(userId: number, email: string): Promise<{
         access_token: string;
     }>;
+    googleLogin(req: any): "No user from google" | {
+        message: string;
+        user: any;
+    };
 }

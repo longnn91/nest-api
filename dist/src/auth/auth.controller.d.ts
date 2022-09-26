@@ -10,4 +10,8 @@ export declare class AuthController {
         access_token: string;
     }>;
     googleAuth(req: any): Promise<void>;
+    googleAuthRedirect(req: any): "No user from google" | {
+        message: string;
+        user: any;
+    };
 }
