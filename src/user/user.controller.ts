@@ -10,15 +10,15 @@ import {
 import { HasRoles } from "src/auth/decorator/roles.decorator";
 import { JwtGuard } from "src/auth/guard/jwt.guard";
 import { RolesGuard } from "src/auth/guard/roles.guard";
-import { User } from "src/models/user.model";
-import { GetUser } from "../auth/decorator/get-user.decorator";
+import { User, UserRole } from "src/models/user.model";
+import { GetUser } from "src/auth/decorator/get-user.decorator";
 import { UserService } from "./user.service";
 @UseGuards(JwtGuard)
 @Controller("users")
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @HasRoles("admin")
+  @HasRoles(UserRole.USER)
   @UseGuards(RolesGuard)
   @Get()
   getUsers() {
@@ -43,5 +43,10 @@ export class UserController {
   @Delete(":id")
   deleteUser(@Param("id") id: string) {
     return this.userService.deleteOne(Number(id));
+  }
+
+  @Put(":id/role")
+  updateUserRole(@Param("id") id: string, @Body() data: { role: UserRole }) {
+    return this.userService.updateRole(Number(id), data.role);
   }
 }

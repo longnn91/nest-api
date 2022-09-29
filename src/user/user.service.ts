@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { UserRole } from "src/models/user.model";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
@@ -34,6 +35,21 @@ export class UserService {
       });
       delete user.hash;
       return user;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async updateRole(id: number, role: UserRole) {
+    try {
+      return await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          role,
+        },
+      });
     } catch (error) {
       return error;
     }

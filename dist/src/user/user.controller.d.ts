@@ -1,4 +1,4 @@
-import { User } from "src/models/user.model";
+import { User, UserRole } from "src/models/user.model";
 import { UserService } from "./user.service";
 export declare class UserController {
     private userService;
@@ -8,4 +8,7 @@ export declare class UserController {
     getUser(id: string): Promise<import(".prisma/client").User>;
     updateUser(data: User, id: string): Promise<any>;
     deleteUser(id: string): Promise<import(".prisma/client").User>;
+    updateUserRole(id: string, data: {
+        role: UserRole;
+    }): Promise<any>;
 }
