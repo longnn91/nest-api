@@ -14,7 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
+const roles_decorator_1 = require("../auth/decorator/roles.decorator");
 const jwt_guard_1 = require("../auth/guard/jwt.guard");
+const roles_guard_1 = require("../auth/guard/roles.guard");
+const user_model_1 = require("../models/user.model");
 const get_user_decorator_1 = require("../auth/decorator/get-user.decorator");
 const user_service_1 = require("./user.service");
 let UserController = class UserController {
@@ -38,6 +41,8 @@ let UserController = class UserController {
     }
 };
 __decorate([
+    (0, roles_decorator_1.HasRoles)("admin"),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

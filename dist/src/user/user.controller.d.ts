@@ -1,4 +1,4 @@
-import { User } from "./user.model";
+import { User } from "src/models/user.model";
 import { UserService } from "./user.service";
 export declare class UserController {
     private userService;

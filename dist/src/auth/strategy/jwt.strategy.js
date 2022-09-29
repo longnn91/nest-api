@@ -30,6 +30,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
             },
         });
         delete user.hash;
+        console.log("JWT strategy");
         return user;
     }
 };

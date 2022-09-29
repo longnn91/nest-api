@@ -7,15 +7,19 @@ import {
   Put,
   UseGuards,
 } from "@nestjs/common";
+import { HasRoles } from "src/auth/decorator/roles.decorator";
 import { JwtGuard } from "src/auth/guard/jwt.guard";
+import { RolesGuard } from "src/auth/guard/roles.guard";
+import { User } from "src/models/user.model";
 import { GetUser } from "../auth/decorator/get-user.decorator";
-import { User } from "./user.model";
 import { UserService } from "./user.service";
 @UseGuards(JwtGuard)
 @Controller("users")
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @HasRoles("admin")
+  @UseGuards(RolesGuard)
   @Get()
   getUsers() {
     return this.userService.findAll();
