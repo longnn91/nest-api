@@ -3,7 +3,14 @@ import { UserService } from "./user.service";
 export declare class UserController {
     private userService;
     constructor(userService: UserService);
-    getUsers(): Promise<import(".prisma/client").User[]>;
+    getUsers(queryData: any): Promise<{
+        data: import(".prisma/client").User[];
+        pagination: {
+            page: number;
+            perPage: number;
+            total: number;
+        };
+    }>;
     getMe(user: User, email: string): User;
     getUser(id: string): Promise<import(".prisma/client").User>;
     updateUser(data: User, id: string): Promise<any>;

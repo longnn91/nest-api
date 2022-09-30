@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Put,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { HasRoles } from "src/auth/decorator/roles.decorator";
@@ -18,11 +19,11 @@ import { UserService } from "./user.service";
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @HasRoles(UserRole.USER)
+  @HasRoles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   @Get()
-  getUsers() {
-    return this.userService.findAll();
+  getUsers(@Query() queryData) {
+    return this.userService.findAll(queryData);
   }
 
   @Get("me")

@@ -24,8 +24,8 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    getUsers() {
-        return this.userService.findAll();
+    getUsers(queryData) {
+        return this.userService.findAll(queryData);
     }
     getMe(user, email) {
         return user;
@@ -44,11 +44,12 @@ let UserController = class UserController {
     }
 };
 __decorate([
-    (0, roles_decorator_1.HasRoles)(user_model_1.UserRole.USER),
+    (0, roles_decorator_1.HasRoles)(user_model_1.UserRole.ADMIN),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "getUsers", null);
 __decorate([

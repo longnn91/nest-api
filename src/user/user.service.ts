@@ -1,14 +1,24 @@
 import { Injectable } from "@nestjs/common";
+import { QueryParams } from "src/models/common.model";
 import { UserRole } from "src/models/user.model";
 import { PrismaService } from "src/prisma/prisma.service";
+import { paginationModal, paginationResult } from "src/utils/common.util";
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    const users = this.prisma.user.findMany();
-    return users;
+  async findAll(queryData: QueryParams) {
+    const { page, perPage } = queryData;
+    const users = await this.prisma.user.findMany({
+      ...paginationModal(page, perPage),
+    });
+    const total = await this.prisma.user.count();
+
+    return {
+      data: users,
+      pagination: paginationResult(page, perPage, total),
+    };
   }
 
   async findOne(id: number) {
