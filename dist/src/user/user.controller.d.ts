@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import { User, UserRole } from "src/models/user.model";
 import { UserService } from "./user.service";
 export declare class UserController {
@@ -7,7 +8,7 @@ export declare class UserController {
         data: import(".prisma/client").User[];
         pagination: {
             page: number;
-            perPage: number;
+            limit: number;
             total: number;
         };
     }>;
@@ -18,4 +19,5 @@ export declare class UserController {
     updateUserRole(id: string, data: {
         role: UserRole;
     }): Promise<any>;
+    uploadFile(file: Express.Multer.File): void;
 }

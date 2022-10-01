@@ -16,18 +16,22 @@ const argon = require("argon2");
 const runtime_1 = require("@prisma/client/runtime");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
+const user_model_1 = require("../models/user.model");
 let AuthService = class AuthService {
     constructor(prisma, jwt, config) {
         this.prisma = prisma;
         this.jwt = jwt;
         this.config = config;
     }
-    async signUp(dto) {
-        const hash = await argon.hash(dto.password);
+    async signUp(userData) {
+        const { email, password, firstName, lastName } = userData;
+        const hash = await argon.hash(password);
         try {
             const user = await this.prisma.user.create({
                 data: {
-                    email: dto.email,
+                    email,
+                    firstName,
+                    lastName,
                     hash,
                 },
             });
@@ -51,7 +55,6 @@ let AuthService = class AuthService {
         if (!user)
             throw new common_1.ForbiddenException("Credentials incorrect");
         const pwMatches = await argon.verify(user.hash, dto.password);
-        console.log({ pwMatches });
         if (!pwMatches)
             throw new common_1.ForbiddenException("Credentials incorrect");
         return this.signToken(user.id, user.email);

@@ -9,15 +9,20 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(queryData: QueryParams) {
-    const { page, perPage } = queryData;
+    const { page, limit, search } = queryData;
     const users = await this.prisma.user.findMany({
-      ...paginationModal(page, perPage),
+      ...paginationModal(page, limit),
+      where: {
+        email: {
+          contains: search,
+        },
+      },
     });
     const total = await this.prisma.user.count();
 
     return {
       data: users,
-      pagination: paginationResult(page, perPage, total),
+      pagination: paginationResult(page, limit, total),
     };
   }
 

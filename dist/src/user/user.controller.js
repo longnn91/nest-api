@@ -20,6 +20,7 @@ const roles_guard_1 = require("../auth/guard/roles.guard");
 const user_model_1 = require("../models/user.model");
 const get_user_decorator_1 = require("../auth/decorator/get-user.decorator");
 const user_service_1 = require("./user.service");
+const multer_1 = require("@nestjs/platform-express/multer");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -41,6 +42,9 @@ let UserController = class UserController {
     }
     updateUserRole(id, data) {
         return this.userService.updateRole(Number(id), data.role);
+    }
+    uploadFile(file) {
+        console.log({ file });
     }
 };
 __decorate([
@@ -90,6 +94,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "updateUserRole", null);
+__decorate([
+    (0, common_1.Post)("upload"),
+    (0, common_1.UseInterceptors)((0, multer_1.FileInterceptor)("file")),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "uploadFile", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)("users"),

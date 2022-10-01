@@ -1,14 +1,15 @@
-export const paginationModal = (page, perPage) => {
+export const paginationModal = (page, limit) => {
+  if (!page || !limit) return null;
   const _page = Number(page);
-  const _perPage = Number(perPage);
+  const _limit = Number(limit);
   return {
-    skip: _page > 1 ? (_page - 1) * _perPage : 0,
-    take: _perPage,
+    skip: _page > 1 ? (_page - 1) * _limit : 0,
+    take: _limit,
   };
 };
 
-export const paginationResult = (page, perPage, total) => ({
+export const paginationResult = (page, limit, total) => ({
   page: Number(page),
-  perPage: Number(perPage),
+  limit: Number(limit),
   total: Number(total),
 });

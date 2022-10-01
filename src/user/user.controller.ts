@@ -4,9 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 import { HasRoles } from "src/auth/decorator/roles.decorator";
 import { JwtGuard } from "src/auth/guard/jwt.guard";
@@ -14,6 +17,7 @@ import { RolesGuard } from "src/auth/guard/roles.guard";
 import { User, UserRole } from "src/models/user.model";
 import { GetUser } from "src/auth/decorator/get-user.decorator";
 import { UserService } from "./user.service";
+import { FileInterceptor } from "@nestjs/platform-express/multer";
 @UseGuards(JwtGuard)
 @Controller("users")
 export class UserController {
@@ -49,5 +53,11 @@ export class UserController {
   @Put(":id/role")
   updateUserRole(@Param("id") id: string, @Body() data: { role: UserRole }) {
     return this.userService.updateRole(Number(id), data.role);
+  }
+
+  @Post("upload")
+  @UseInterceptors(FileInterceptor("file"))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log({ file });
   }
 }
